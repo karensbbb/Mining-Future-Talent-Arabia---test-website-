@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Secrets — never commit
+.env
+.env.*
+credentials.json
+token.json
+
+# Disposable intermediates (WAT framework: .tmp is regenerated as needed)
+.tmp/
+
+# Stray/unused working file (6.5 MB, not referenced by the site)
+guildhall copy.png
+
+# OS / editor noise
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/

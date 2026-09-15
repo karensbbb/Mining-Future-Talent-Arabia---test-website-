@@ -1,0 +1,1442 @@
+/* ==========================================================================
+   MINING @ Future Talent Arabia — conversion layer
+   Loaded after site.css. Adds the structures the practice page was missing:
+   mobile navigation, proof, numbered services, commodity index, employer and
+   candidate paths, process SLAs, FAQ, enquiry form, insights, inner pages.
+   Tokens and primitives in site.css are unchanged.
+   ========================================================================== */
+
+:root {
+  --radius:      14px;
+  --radius-sm:   10px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(11,42,48,.05), 0 1px 3px rgba(11,42,48,.04);
+  --shadow-md: 0 4px 14px -4px rgba(11,42,48,.10), 0 2px 6px -2px rgba(11,42,48,.05);
+  --shadow-lg: 0 24px 48px -18px rgba(11,42,48,.22), 0 8px 20px -12px rgba(11,42,48,.12);
+  --hdr-h: 5rem;
+}
+
+/* ==========================================================================
+   HEADER — mobile drawer
+   The old build hid the nav below 62rem and put nothing in its place, so the
+   site had no navigation at all on a phone. This restores it.
+   ========================================================================== */
+
+.hdr__burger {
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: .25rem;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--d-rule-hi);
+  border-radius: 4px;
+  color: var(--d-fg);
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+}
+.hdr__burger:hover { border-color: var(--d-fg); background: rgba(242,238,231,.07); }
+.hdr.is-stuck .hdr__burger { border-color: var(--rule-strong); color: var(--fg); }
+.hdr.is-stuck .hdr__burger:hover { border-color: var(--fg); background: var(--haze-soft); }
+
+.hdr__burger i {
+  display: block;
+  position: relative;
+  width: 1.125rem;
+  height: 1px;
+  background: currentColor;
+  transition: background-color .2s ease;
+}
+.hdr__burger i::before,
+.hdr__burger i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 1.125rem;
+  height: 1px;
+  background: currentColor;
+  transition: transform .28s cubic-bezier(.16,.84,.3,1);
+}
+.hdr__burger i::before { top: -6px; }
+.hdr__burger i::after  { top:  6px; }
+.hdr__burger[aria-expanded="true"] i { background: transparent; }
+.hdr__burger[aria-expanded="true"] i::before { transform: translateY(6px) rotate(45deg); }
+.hdr__burger[aria-expanded="true"] i::after  { transform: translateY(-6px) rotate(-45deg); }
+
+.drawer {
+  position: fixed;
+  inset: var(--hdr-h) 0 0 0;
+  z-index: 45;
+  background: var(--d-bg);
+  color: var(--d-fg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.75rem var(--gutter) 3rem;
+  transform: translateY(-8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .24s ease, transform .24s cubic-bezier(.16,.84,.3,1), visibility .24s;
+}
+.drawer.is-open { opacity: 1; transform: none; visibility: visible; }
+
+.drawer a {
+  display: flex;
+  align-items: baseline;
+  gap: .875rem;
+  text-decoration: none;
+  color: var(--d-fg);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.375rem;
+  letter-spacing: -0.015em;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--d-rule);
+}
+.drawer a span {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--d-accent);
+}
+.drawer a:hover { color: var(--brass); }
+
+.drawer__cta { display: grid; gap: .75rem; margin-top: 2rem; }
+.drawer__cta .btn { justify-content: center; }
+.drawer__meta {
+  margin-top: 2.25rem;
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  line-height: 2;
+}
+.drawer__meta a {
+  display: inline;
+  font: inherit;
+  letter-spacing: inherit;
+  padding: 0;
+  border: 0;
+  color: var(--d-muted);
+}
+body.nav-open { overflow: hidden; }
+
+@media (max-width: 72rem) {
+  .hdr__nav { display: none; }
+  .hdr__burger { display: inline-flex; }
+  .hdr .btn--nav { display: none; }
+}
+@media (min-width: 72.0625rem) {
+  .drawer { display: none; }
+}
+
+.hdr__nav a.is-current { color: var(--d-fg); border-bottom-color: var(--d-accent); }
+.hdr.is-stuck .hdr__nav a.is-current { color: var(--fg); border-bottom-color: var(--accent); }
+
+/* ==========================================================================
+   SHARED PRIMITIVES
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--d-rule-hi);
+  background: rgba(242,238,231,.06);
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 1.75rem;
+}
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--d-accent);
+  flex: 0 0 auto;
+}
+.badge--light {
+  border-color: var(--rule-strong);
+  background: var(--haze-soft);
+  color: var(--accent);
+}
+.badge--light::before { background: var(--accent); }
+
+/* The header button sits in a single row with the nav and must not wrap into
+   two lines. Elsewhere — the drawer, the hero, a full-width form submit —
+   wrapping is the correct behaviour on a narrow phone. */
+.hdr .btn { white-space: nowrap; }
+
+.btn--pill  { border-radius: var(--radius-pill); padding-inline: 1.625rem; }
+.btn--brass { background: var(--brass); color: var(--ink); }
+.btn--brass:hover { background: #E4B570; }
+.btn--outline { border-color: var(--rule-strong); color: var(--fg); }
+.btn--outline:hover { border-color: var(--fg); background: var(--haze-soft); }
+.btn--block { width: 100%; justify-content: center; }
+
+.h-sm { font-size: clamp(1.125rem, 1.8vw, 1.375rem); letter-spacing: -0.01em; }
+
+/* Four-up variant of the discipline columns, for pages with no sticky figure
+   beside them. A modifier rather than an inline style, so the narrow
+   breakpoints in site.css can still collapse it. */
+@media (min-width: 64.0625rem) {
+  .disc__cols--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.sechead--center {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+  /* The two-column head uses a wide column gap; stacked and centred it
+     reads as a hole between the heading and its lede. */
+  gap: 1.25rem;
+  max-width: 46rem;
+  margin-inline: auto;
+}
+.sechead--center .eyebrow { justify-content: center; }
+.sechead--center .lede { max-width: 40em; }
+
+.centered { display: flex; justify-content: center; margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* Scroll reveal. Opt-in per element, and only where motion is welcome —
+   with reduced motion the elements are simply visible from the start. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { opacity: 0; transform: translateY(18px); }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity .6s ease, transform .6s cubic-bezier(.16,.84,.3,1);
+  }
+}
+
+/* ==========================================================================
+   TRUST BAR — the operating context our people work in
+   ========================================================================== */
+
+.trust {
+  background: var(--d-bg);
+  border-top: 1px solid var(--d-rule);
+  padding-block: 2.25rem;
+  overflow: hidden;
+}
+.trust__lbl {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.trust__track {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  width: max-content;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .trust__track { animation: drift 46s linear infinite; }
+  .trust:hover .trust__track { animation-play-state: paused; }
+}
+@keyframes drift { to { transform: translateX(-50%); } }
+
+.trust__item {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  font-family: var(--font-mono);
+  font-size: .8125rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  white-space: nowrap;
+}
+.trust__item::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--d-rule-hi);
+}
+
+/* ==========================================================================
+   PROOF CARDS
+   ========================================================================== */
+
+.proof { background: var(--bg-alt); }
+.proof__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.proofcard {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: clamp(1.375rem, 2.4vw, 1.875rem);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.proofcard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--rule-strong);
+}
+.proofcard__icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--haze-soft);
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+.proofcard__tag {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(180,85,42,.09);
+  border-radius: var(--radius-pill);
+  padding: .25rem .625rem;
+}
+.proofcard h3 { font-size: 1.0625rem; }
+.proofcard p { font-size: .875rem; color: var(--fg-muted); line-height: 1.6; }
+
+@media (max-width: 62rem) { .proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 34rem) { .proof__grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   CALLOUT + BIG STAT
+   ========================================================================== */
+
+.callout {
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(100deg, var(--haze-soft), transparent 85%);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  margin-block: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.callout p {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.125rem, 2vw, 1.4375rem);
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  max-width: 40ch;
+}
+
+.bigstat {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: center;
+  margin-block: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.bigstat__fig {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 7vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.bigstat p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(.9375rem, 1.5vw, 1.0625rem);
+  line-height: 1.6;
+  letter-spacing: normal;
+  color: var(--fg-muted);
+  max-width: 46ch;
+}
+.bigstat p strong { color: var(--fg); font-weight: 600; }
+
+@media (max-width: 34rem) {
+  .bigstat { grid-template-columns: 1fr; gap: .5rem; }
+}
+
+/* ==========================================================================
+   DARK PANEL
+   ========================================================================== */
+
+.panel {
+  position: relative;
+  background: var(--d-bg);
+  color: var(--d-fg);
+  border-radius: var(--radius);
+  padding: clamp(1.75rem, 4.5vw, 3.5rem);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-linear-gradient(
+    to bottom, rgba(216,164,94,.09) 0 1px, transparent 1px 4.5rem
+  );
+  -webkit-mask-image: radial-gradient(120% 90% at 88% 12%, #000, transparent 70%);
+  mask-image: radial-gradient(120% 90% at 88% 12%, #000, transparent 70%);
+}
+.panel h2, .panel h3 { color: #fff; }
+.panel p { color: var(--d-muted); }
+.panel__body { max-width: 44rem; }
+.panel__body h2 + p { margin-top: 1.375rem; }
+.panel__body p + p { margin-top: 1rem; }
+.panel .btn { margin-top: 2rem; }
+.panel--center { text-align: center; }
+.panel--center .panel__body { margin-inline: auto; }
+.panel--center .eyebrow { justify-content: center; }
+.panel--center .badge { margin-inline: auto; }
+
+/* ==========================================================================
+   ARROW-FILL BUTTON
+
+   A pill with a small circle pinned to its right edge. On hover the circle
+   expands to fill the whole pill, a clipped duplicate of the label is revealed
+   in the fill colour as the clip opens, and the arrow swaps: the resting one
+   flies out to the right while a second flies in from the left.
+
+   Three layers have to move in lockstep for the illusion to hold, so they all
+   share --afb-dur and --afb-ease. The clip rectangle and the fill rectangle
+   are the same geometry expressed two ways (clip-path inset vs. inset), which
+   is why both start from the circle's box and end at the full pill.
+
+   Ported from a React/Tailwind component; this site has no build step, so it
+   is plain CSS driven by :hover and :focus-visible. Keyboard users get the
+   same animation, which the original did not offer.
+   ========================================================================== */
+
+.arrowfill {
+  --afb-h: 2.875rem;
+  --afb-circle: 2.125rem;
+  --afb-gap: .3125rem;                                   /* circle inset from the right edge */
+  --afb-pad: 1.125rem;
+  --afb-inset-y: calc((100% - var(--afb-circle)) / 2);
+  --afb-dur: 450ms;
+  --afb-ease: cubic-bezier(.785, .135, .15, .86);
+
+  /* Defaults suit the dark lifecycle band; override per context. */
+  --afb-bg: transparent;
+  --afb-text: var(--d-fg);
+  --afb-border: var(--d-rule-hi);
+  --afb-fill-bg: var(--brass);
+  --afb-fill-text: var(--ink);
+  --afb-arrow: var(--ink);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--afb-h);
+  padding-left: var(--afb-pad);
+  padding-right: calc(var(--afb-circle) + var(--afb-gap) + var(--afb-pad) * .75);
+  overflow: hidden;
+  border: 1px solid var(--afb-border);
+  border-radius: var(--radius-pill);
+  background: var(--afb-bg);
+  color: var(--afb-text);
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1;
+  text-rendering: geometricPrecision;
+  transition: border-color var(--afb-dur) var(--afb-ease);
+}
+.arrowfill:hover,
+.arrowfill:active,
+.arrowfill:focus-visible { border-color: var(--afb-fill-bg); }
+
+/* Resting label. Sits under the fill, so it is what you see before hover. */
+.arrowfill__label { position: relative; z-index: 1; }
+
+/* The expanding fill. Starts as exactly the circle's rectangle. */
+.arrowfill__fill {
+  position: absolute;
+  z-index: 2;
+  inset:
+    var(--afb-inset-y)
+    var(--afb-gap)
+    var(--afb-inset-y)
+    calc(100% - var(--afb-gap) - var(--afb-circle));
+  border-radius: var(--radius-pill);
+  background: var(--afb-fill-bg);
+  transition: inset var(--afb-dur) var(--afb-ease);
+}
+.arrowfill:hover .arrowfill__fill,
+.arrowfill:active .arrowfill__fill,
+.arrowfill:focus-visible .arrowfill__fill { inset: 0; }
+
+/* The same label again in the fill colour, clipped to the circle until hover.
+   Padding must match the anchor's exactly or the two labels will not line up
+   during the wipe. */
+.arrowfill__clip {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding-left: var(--afb-pad);
+  padding-right: calc(var(--afb-circle) + var(--afb-gap) + var(--afb-pad) * .75);
+  color: var(--afb-fill-text);
+  clip-path: inset(
+    var(--afb-inset-y)
+    var(--afb-gap)
+    var(--afb-inset-y)
+    calc(100% - var(--afb-gap) - var(--afb-circle))
+    round var(--radius-pill)
+  );
+  transition: clip-path var(--afb-dur) var(--afb-ease);
+}
+.arrowfill:hover .arrowfill__clip,
+.arrowfill:active .arrowfill__clip,
+.arrowfill:focus-visible .arrowfill__clip {
+  clip-path: inset(0 0 0 0 round var(--radius-pill));
+}
+
+/* The circle itself stays put and keeps its own colour — it is the one part
+   that does not move, which is what sells the fill expanding out from it. */
+.arrowfill__icon {
+  position: absolute;
+  z-index: 3;
+  right: var(--afb-gap);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--afb-circle);
+  height: var(--afb-circle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--afb-fill-bg);
+  color: var(--afb-arrow);
+  /* Safari otherwise lets the arrows paint outside the rounded corner. */
+  -webkit-mask-image: -webkit-radial-gradient(#fff, #000);
+  mask-image: radial-gradient(#fff, #000);
+}
+
+.arrowfill__arrow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: .875rem;
+  height: .875rem;
+  transition: transform var(--afb-dur) var(--afb-ease);
+}
+.arrowfill__arrow--in  { transform: translate(-170%, -50%) scale(0); }
+.arrowfill__arrow--out { transform: translate(-50%, -50%) scale(1); }
+.arrowfill:hover .arrowfill__arrow--in,
+.arrowfill:active .arrowfill__arrow--in,
+.arrowfill:focus-visible .arrowfill__arrow--in { transform: translate(-50%, -50%) scale(1); }
+.arrowfill:hover .arrowfill__arrow--out,
+.arrowfill:active .arrowfill__arrow--out,
+.arrowfill:focus-visible .arrowfill__arrow--out { transform: translate(70%, -50%) scale(0); }
+
+/* Full-width variant — used in the lifecycle rail, where each button has to
+   fit a narrow grid column. */
+.arrowfill--block { display: flex; width: 100%; }
+.arrowfill--block .arrowfill__label,
+.arrowfill--block .arrowfill__clip span { margin-right: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .arrowfill,
+  .arrowfill__fill,
+  .arrowfill__clip,
+  .arrowfill__arrow { transition: none; }
+}
+
+/* In the lifecycle rail the button closes each stage card. */
+.stage .arrowfill { margin-top: 1.125rem; }
+
+/* ==========================================================================
+   PLEDGES — the two commitments, inside a dark panel
+   ========================================================================== */
+
+.pledges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3.5vw, 2.75rem);
+  margin-block: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(1.75rem, 3.5vw, 2.5rem);
+  border-top: 1px solid var(--d-rule);
+}
+.pledge__ico {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: rgba(216,164,94,.14);
+  color: var(--brass);
+  margin-bottom: 1rem;
+}
+.pledge h3 {
+  font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+  margin-bottom: .625rem;
+}
+.pledge p { font-size: .9375rem; line-height: 1.65; }
+.pledge ul {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .5rem;
+}
+.pledge li {
+  position: relative;
+  padding-left: 1.375rem;
+  font-size: .875rem;
+  line-height: 1.55;
+  color: var(--d-muted);
+}
+.pledge li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .5rem;
+  width: .4375rem;
+  height: .4375rem;
+  border-radius: 50%;
+  background: var(--d-accent);
+}
+
+@media (max-width: 52rem) {
+  .pledges { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   NUMBERED SERVICE CARDS
+   ========================================================================== */
+
+.numgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.numcard {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.numcard::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .3s cubic-bezier(.16,.84,.3,1);
+}
+.numcard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--rule-strong);
+}
+.numcard:hover::before { transform: scaleY(1); }
+.numcard__no {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: .9;
+  letter-spacing: -0.04em;
+  color: var(--haze);
+  font-variant-numeric: tabular-nums;
+}
+.numcard h3 {
+  font-family: var(--font-mono);
+  font-size: .8125rem;
+  font-weight: 500;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.numcard p { font-size: .9375rem; color: var(--fg-muted); line-height: 1.6; }
+.numcard ul {
+  list-style: none;
+  margin: auto 0 0;
+  padding: 1rem 0 0;
+  border-top: 1px dashed var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem .5rem;
+}
+.numcard li {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  padding: .25rem .5625rem;
+}
+
+@media (max-width: 46rem) { .numgrid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   COMMODITY INDEX
+   ========================================================================== */
+
+.comgrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+}
+.comrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--bar, var(--accent));
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.125rem;
+  transition: background-color .22s ease, transform .22s ease, border-color .22s ease;
+}
+.comrow:hover {
+  background: var(--haze-soft);
+  transform: translateX(3px);
+  border-color: var(--rule-strong);
+  border-left-color: var(--bar, var(--accent));
+}
+.comrow b {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .9375rem;
+  color: var(--fg);
+  margin-right: auto;
+}
+.comrow small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  font-weight: 400;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-top: .1875rem;
+}
+.comrow svg {
+  flex: 0 0 auto;
+  color: var(--fg-faint);
+  transition: transform .22s ease, color .22s ease;
+}
+.comrow:hover svg { transform: translateX(3px); color: var(--accent); }
+
+@media (max-width: 60rem) { .comgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 38rem) { .comgrid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   EMPLOYER / CANDIDATE SPLIT
+   ========================================================================== */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+/* Grid items default to min-width:auto, which lets a wide child (a data table
+   inside its own scroller) push the whole column past the viewport. */
+.split > * { min-width: 0; }
+.split--flip .split__media { order: 2; }
+.split__media { position: relative; }
+.split__media img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.split__chips {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .625rem;
+}
+.chip {
+  background: rgba(11,42,48,.78);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(242,238,231,.18);
+  border-radius: var(--radius-sm);
+  padding: .75rem .625rem;
+  text-align: center;
+}
+.chip b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.0625rem, 2vw, 1.375rem);
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 1.1;
+}
+.chip b i { font-style: normal; font-size: .625em; color: var(--brass); }
+.chip span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .5rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--d-muted);
+  margin-top: .3125rem;
+  line-height: 1.4;
+}
+
+.checklist { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1rem; }
+.checklist li {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: .875rem;
+  font-size: .9375rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+.checklist b { color: var(--fg); font-weight: 600; }
+.checklist svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: .3125rem;
+  border-radius: 50%;
+  background: var(--haze-soft);
+  color: var(--accent);
+  margin-top: .0625rem;
+}
+
+.split__cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.trustrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.75rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.trustrow span { display: flex; align-items: center; gap: .5rem; }
+
+@media (max-width: 60rem) {
+  .split { grid-template-columns: 1fr; }
+  .split--flip .split__media { order: 0; }
+  .split__media img { aspect-ratio: 16 / 10; }
+}
+
+/* ==========================================================================
+   CANDIDATES (dark)
+   ========================================================================== */
+
+.cand { background: var(--d-bg); color: var(--d-fg); }
+.cand h2 { color: #fff; }
+.cand .lede { color: var(--d-muted); }
+.cand__grid {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: stretch;
+}
+.candcard {
+  background: rgba(242,238,231,.04);
+  border: 1px solid var(--d-rule);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+}
+.candcard--feature {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--d-bg), var(--d-bg)) padding-box,
+    linear-gradient(100deg, var(--brass), var(--ore) 55%, var(--teal) 100%) border-box;
+}
+.candcard__head { display: flex; align-items: center; gap: .875rem; margin-bottom: 1rem; }
+.candcard__ico {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: rgba(216,164,94,.14);
+  color: var(--brass);
+  flex: 0 0 auto;
+}
+.candcard h3 { color: #fff; font-size: 1.375rem; }
+.candcard__sub {
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 1rem;
+}
+.candcard p { color: var(--d-muted); font-size: .9375rem; line-height: 1.65; }
+.candcard ul { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: .625rem; }
+.candcard ul li {
+  display: grid;
+  grid-template-columns: 1.125rem minmax(0, 1fr);
+  gap: .75rem;
+  align-items: start;
+  font-size: .875rem;
+  color: var(--d-muted);
+}
+.candcard ul svg { color: var(--brass); margin-top: .25rem; }
+.candcard .btn { margin-top: auto; align-self: flex-start; }
+.candcard ul + .btn { margin-top: 1.75rem; }
+
+@media (max-width: 56rem) { .cand__grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   PROCESS / SERVICE LEVELS
+   ========================================================================== */
+
+.process { background: var(--bg); }
+.process__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  counter-reset: step;
+}
+.step {
+  counter-increment: step;
+  border-top: 2px solid var(--rule-strong);
+  padding-top: 1.25rem;
+}
+.step:first-child { border-top-color: var(--accent); }
+.step::before {
+  content: "0" counter(step);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .16em;
+  color: var(--fg-faint);
+  margin-bottom: .625rem;
+}
+.step h3 { font-size: 1.0625rem; margin-bottom: .5rem; }
+.step p { font-size: .875rem; color: var(--fg-muted); line-height: 1.6; }
+.step__sla {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(180,85,42,.09);
+  border-radius: var(--radius-pill);
+  padding: .3125rem .6875rem;
+}
+
+@media (max-width: 62rem) { .process__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 34rem) { .process__grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+
+.faq { background: var(--bg-alt); }
+.faq__list { max-width: 52rem; margin-inline: auto; }
+.faq details { border-top: 1px solid var(--rule); padding-block: .25rem; }
+.faq details:last-of-type { border-bottom: 1px solid var(--rule); }
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "";
+  margin-left: auto;
+  margin-top: .3125rem;
+  flex: 0 0 auto;
+  width: .875rem;
+  height: .875rem;
+  background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path d='M7 0v14M0 7h14' stroke='black' stroke-width='1.6'/></svg>") center / contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path d='M7 0v14M0 7h14' stroke='black' stroke-width='1.6'/></svg>") center / contain no-repeat;
+  transition: transform .25s cubic-bezier(.16,.84,.3,1);
+}
+.faq details[open] summary::after { transform: rotate(135deg); }
+.faq__a {
+  padding: 0 2rem 1.5rem 0;
+  font-size: .9375rem;
+  color: var(--fg-muted);
+  line-height: 1.7;
+  max-width: 62ch;
+}
+.faq__a p + p { margin-top: .75rem; }
+
+/* ==========================================================================
+   ENQUIRY FORM
+   ========================================================================== */
+
+.enquiry { background: var(--bg); }
+.form {
+  max-width: 46rem;
+  margin-inline: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  box-shadow: var(--shadow-md);
+}
+.form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+/* Space the form's own blocks apart. Scoped to direct children so the two
+   fields paired inside a .form__row are not pushed out of alignment. */
+.form > * + * { margin-top: 1.25rem; }
+
+.field { display: block; }
+.field > span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: .5rem;
+}
+.field > span i { font-style: normal; color: var(--accent); }
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: .9375rem;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  padding: .8125rem .875rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.field textarea { resize: vertical; min-height: 7rem; line-height: 1.6; }
+.field select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%234C6168' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right .875rem center;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(180,85,42,.14);
+}
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] { border-color: var(--ore); }
+/* Overrides the uppercase mono label styling above — a hint is prose. */
+.field > span.field__hint {
+  font-family: var(--font-body);
+  font-size: .75rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--fg-faint);
+  margin: .4375rem 0 0;
+  line-height: 1.5;
+}
+
+.form__consent {
+  display: grid;
+  grid-template-columns: 1.125rem minmax(0, 1fr);
+  gap: .75rem;
+  align-items: start;
+  margin-top: 1.5rem;
+  font-size: .8125rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+.form__consent input {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: .1875rem;
+  accent-color: var(--ore);
+}
+.form button[type="submit"] {
+  margin-top: 1.5rem;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+.form__note {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  text-align: center;
+  margin-top: 1.25rem;
+  line-height: 1.7;
+}
+.form__status {
+  margin-top: 1.25rem;
+  padding: .9375rem 1.125rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-size: .875rem;
+  line-height: 1.6;
+}
+.form__status[hidden] { display: none; }
+.form__status--ok  { border-color: #2F6B4F; color: #2F6B4F; background: rgba(47,107,79,.07); }
+.form__status--err { border-color: var(--ore); color: var(--ore); background: rgba(180,85,42,.07); }
+
+/* honeypot — off-screen rather than display:none so bots still fill it */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+@media (max-width: 40rem) {
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   BRIEF CARD — split-panel short enquiry form
+
+   A single rounded card: mining photograph and the pitch on the left, four
+   fields on the right. Four fields is the whole point — it is the low-friction
+   route in, and contact.html still carries the long qualified form for anyone
+   who wants to give full detail up front.
+
+   Ported from a React/Tailwind split-panel layout. Fields reuse the .field and
+   .form__* rules above so both forms on the site stay visually identical.
+   ========================================================================== */
+
+.briefcard {
+  --bc-radius: 20px;
+
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  max-width: 64rem;
+  margin-inline: auto;
+  border: 1px solid var(--rule);
+  border-radius: var(--bc-radius);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---- left: photograph and pitch ---- */
+.briefcard__media {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  background: var(--ink);
+  color: var(--d-fg);
+  isolation: isolate;
+}
+.briefcard__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 50%;
+}
+.briefcard__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(170deg, rgba(11,42,48,.88) 0%, rgba(11,42,48,.76) 45%, rgba(11,42,48,.94) 100%);
+}
+.briefcard__logo {
+  width: 5.5rem;
+  height: auto;
+  filter: brightness(0) invert(1);
+  margin-bottom: auto;
+}
+.briefcard__media h3 {
+  font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+  line-height: 1.2;
+  color: #fff;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+.briefcard__media p {
+  margin-top: .875rem;
+  font-size: .9375rem;
+  line-height: 1.6;
+  color: var(--d-muted);
+}
+.briefcard__points {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid var(--d-rule);
+  display: grid;
+  gap: .75rem;
+}
+.briefcard__points li {
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr);
+  gap: .75rem;
+  align-items: start;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--d-muted);
+}
+.briefcard__points svg { margin-top: .1875rem; color: var(--brass); }
+
+/* ---- right: the fields ---- */
+.briefcard__form { padding: clamp(1.75rem, 3.5vw, 2.75rem); }
+.briefcard__form > form > * + * { margin-top: 1.25rem; }
+.briefcard__head { margin-bottom: 1.75rem; }
+.briefcard__head h2 { font-size: clamp(1.5rem, 2.6vw, 1.875rem); }
+.briefcard__head p {
+  margin-top: .625rem;
+  font-size: .9375rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.briefcard__head a { color: var(--accent); text-underline-offset: 3px; }
+
+@media (max-width: 56rem) {
+  .briefcard { grid-template-columns: 1fr; }
+  /* The photo becomes a banner rather than disappearing — it is what tells a
+     visitor on a phone which practice they are writing to. */
+  .briefcard__media { min-height: 15rem; }
+  .briefcard__logo { margin-bottom: 0; }
+  .briefcard__media h3 { margin-top: 1.5rem; }
+  .briefcard__points { display: none; }
+}
+
+/* ==========================================================================
+   INSIGHTS
+   ========================================================================== */
+
+.posts { background: var(--bg-alt); }
+.posts__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.post {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.post:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--rule-strong); }
+.post__fig { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--ink); }
+.post__fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s cubic-bezier(.16,.84,.3,1);
+}
+.post:hover .post__fig img { transform: scale(1.04); }
+.post__cat {
+  position: absolute;
+  top: .875rem;
+  left: .875rem;
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(11,42,48,.82);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  padding: .3125rem .6875rem;
+}
+.post__body {
+  flex: 1;
+  padding: 1.375rem 1.375rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+}
+.post__date {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.post h3 { font-size: 1.0625rem; line-height: 1.3; }
+.post p { font-size: .875rem; color: var(--fg-muted); line-height: 1.6; }
+.post__more {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.post__more svg { transition: transform .22s ease; }
+.post:hover .post__more svg { transform: translateX(3px); }
+
+@media (max-width: 62rem) { .posts__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 40rem) { .posts__grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   INNER PAGE HERO + PROSE
+   ========================================================================== */
+
+.phero {
+  position: relative;
+  margin-top: calc(var(--hdr-h) * -1);
+  padding-top: var(--hdr-h);
+  background: var(--ink);
+  color: var(--d-fg);
+  overflow: hidden;
+  isolation: isolate;
+}
+.phero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-linear-gradient(
+    to bottom, rgba(216,164,94,.10) 0 1px, transparent 1px 5rem
+  );
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 55%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 55%, transparent);
+}
+.phero__media { position: absolute; inset: 0; z-index: -2; }
+.phero__media img { width: 100%; height: 100%; object-fit: cover; opacity: .34; }
+/* The photographs carry bright skies. Without this the breadcrumb and lede
+   lose contrast wherever the crop happens to land on one. */
+.phero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(95deg, rgba(11,42,48,.92) 0%, rgba(11,42,48,.74) 46%, rgba(11,42,48,.42) 100%);
+}
+.phero__in { padding-block: clamp(3.5rem, 7vw, 5.5rem) clamp(2.75rem, 5vw, 4rem); max-width: 52rem; }
+.phero h1 { color: #fff; font-size: clamp(2rem, 5vw, 3.5rem); }
+.phero h1 em { font-style: normal; color: var(--brass); }
+.phero__lede {
+  margin-top: 1.5rem;
+  color: #D9E2E4;
+  font-size: clamp(1rem, 1.6vw, 1.1875rem);
+  line-height: 1.6;
+  max-width: 42em;
+}
+
+.crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  margin-bottom: 1.5rem;
+}
+.crumb a { color: var(--d-muted); text-decoration: none; }
+.crumb a:hover { color: var(--brass); }
+.crumb span[aria-hidden] { color: var(--d-rule-hi); }
+
+.prose { max-width: 44rem; }
+.prose h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); margin-top: 2.75rem; margin-bottom: 1rem; }
+.prose h3 { font-size: clamp(1.125rem, 1.9vw, 1.3125rem); margin-top: 2rem; margin-bottom: .75rem; }
+.prose h2:first-child, .prose h3:first-child { margin-top: 0; }
+.prose p { color: var(--fg-muted); line-height: 1.75; }
+.prose p + p { margin-top: 1rem; }
+.prose strong { color: var(--fg); font-weight: 600; }
+.prose ul { margin: 1rem 0 0; padding-left: 1.125rem; color: var(--fg-muted); line-height: 1.75; }
+.prose li + li { margin-top: .375rem; }
+.prose a { color: var(--accent); text-underline-offset: 3px; }
+
+/* ==========================================================================
+   TABLES + FOOTER EXTRAS
+   ========================================================================== */
+
+.tablewrap { overflow-x: auto; max-width: 100%; margin-top: 1.5rem; }
+.tbl { width: 100%; min-width: 36rem; border-collapse: collapse; font-size: .875rem; }
+.tbl th, .tbl td { text-align: left; padding: .875rem 1rem; border-bottom: 1px solid var(--rule); }
+.tbl th {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  border-bottom-color: var(--rule-strong);
+}
+.tbl td { color: var(--fg-muted); vertical-align: top; }
+.tbl td:first-child { color: var(--fg); font-weight: 600; }
+
+.ftr__social { display: flex; gap: .625rem; margin-top: 1.5rem; }
+.ftr__social a {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--d-rule);
+  border-radius: 50%;
+  color: var(--d-muted);
+  transition: border-color .2s ease, color .2s ease;
+}
+.ftr__social a:hover { border-color: var(--brass); color: var(--brass); }
+
+/* "recruitment@futuretalentarabia.com" is one unbreakable 34-character token.
+   In a two-column footer on a 320px phone it sets the grid's min-content width
+   and pushes the whole page wider than the screen. */
+.ftr a { overflow-wrap: anywhere; }
+
+@media (max-width: 30rem) {
+  .ftr__top { grid-template-columns: 1fr; }
+}

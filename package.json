@@ -1,0 +1,15 @@
+{
+  "name": "fta-mining-website",
+  "private": true,
+  "version": "2.0.0",
+  "description": "MINING @ Future Talent Arabia — landing page, inner pages and site tooling",
+  "scripts": {
+    "serve": "node tools/serve.js --port 4321",
+    "test": "node tools/smoke.js",
+    "shot": "node tools/screenshot.js",
+    "shots": "node tools/screenshot.js http://localhost:4321/ --all"
+  },
+  "dependencies": {
+    "puppeteer": "^25.10.0"
+  }
+}
