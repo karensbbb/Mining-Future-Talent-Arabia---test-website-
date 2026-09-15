@@ -134,7 +134,7 @@ loops), `.proofcard` takes awards or testimonials as-is, and both `.chip` and
 
 ### Other launch items
 
-- Canonical URLs assume the site lives at `https://www.futuretalentarabia.com/mining/`. Change them if the path differs.
+- Canonical URLs, Open Graph tags and JSON-LD breadcrumbs point at `https://mining.futuretalentarabia.com/`, served by GitHub Pages from the `main` branch. The `CNAME` file in the repo root binds that domain — do not delete it. If the address changes, update `CNAME` and re-run the search for `mining.futuretalentarabia.com` across the HTML.
 - Replace `assets/img/fta-logo.png` as the favicon with a proper favicon set — a 180×150 PNG is not ideal at 16px.
 - The LinkedIn URL in the footer is a guess; confirm it.
 - Add a privacy policy and link it from the form consent checkboxes.
