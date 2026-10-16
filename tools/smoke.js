@@ -24,6 +24,7 @@ const PAGES = [
   '/for-candidates.html',
   '/insights.html',
   '/contact.html',
+  '/privacy.html',
 ];
 
 const SYSTEM_CHROME = [
@@ -90,10 +91,15 @@ async function main() {
         desc: (document.querySelector('meta[name="description"]') || {}).content || '',
         h1: document.querySelectorAll('h1').length,
         imgsNoAlt: Array.from(document.images).filter((i) => !i.hasAttribute('alt')).length,
+        favicon: (document.querySelector('link[rel="icon"]') || {}).getAttribute('href') || '',
+        hasForm: !!document.querySelector('form[data-enquiry]'),
+        policyLink: !!document.querySelector('form[data-enquiry] .form__consent a[href="privacy.html"]'),
       }));
       check(`${route} has a title and description`, !!meta.title && meta.desc.length > 40, meta.title);
       check(`${route} has exactly one h1`, meta.h1 === 1, 'found ' + meta.h1);
       check(`${route} images all carry alt`, meta.imgsNoAlt === 0, meta.imgsNoAlt + ' missing');
+      check(`${route} uses the SVG favicon`, meta.favicon === '/favicon.svg', meta.favicon || 'missing');
+      check(`${route} consent links to the privacy policy`, !meta.hasForm || meta.policyLink);
 
       // Internal links must point at something that exists.
       const links = await page.evaluate(() => Array.from(

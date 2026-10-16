@@ -134,10 +134,11 @@ loops), `.proofcard` takes awards or testimonials as-is, and both `.chip` and
 
 ### Other launch items
 
-- Canonical URLs, Open Graph tags and JSON-LD breadcrumbs point at `https://mining.futuretalentarabia.com/`, served by GitHub Pages from the `main` branch. The `CNAME` file in the repo root binds that domain — do not delete it. If the address changes, update `CNAME` and re-run the search for `mining.futuretalentarabia.com` across the HTML.
-- Replace `assets/img/fta-logo.png` as the favicon with a proper favicon set — a 180×150 PNG is not ideal at 16px.
-- The LinkedIn URL in the footer is a guess; confirm it.
-- Add a privacy policy and link it from the form consent checkboxes.
+- Canonical URLs, Open Graph tags and JSON-LD breadcrumbs point at `https://mining.futuretalentarabia.com/`, served by GitHub Pages from the `main` branch. Keep the root `CNAME` file tracked to bind that domain. If the address changes, update `CNAME` and re-run the search for `mining.futuretalentarabia.com` across the HTML.
+- A scalable SVG browser favicon is now wired across the live pages. The existing logo PNG remains the Apple touch icon; replace it with a square touch-icon asset if a dedicated iOS icon is required.
+- The LinkedIn URL in the footer still needs confirmation against FTA's official social account.
+- `privacy.html` is linked from the site footer and all enquiry consent labels. Before launch, have FTA review its responsible legal entity, applicable privacy requirements, FormSubmit/vendor terms, data-transfer details and retention practices.
+- Activate FormSubmit by submitting a test enquiry and confirming the verification email at `recruitment@futuretalentarabia.com`; do not consider the forms live until this one-time step is complete.
 
 ---
 
