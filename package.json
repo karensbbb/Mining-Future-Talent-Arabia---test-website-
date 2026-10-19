@@ -7,7 +7,8 @@
     "serve": "node tools/serve.js --port 4321",
     "test": "node tools/smoke.js",
     "shot": "node tools/screenshot.js",
-    "shots": "node tools/screenshot.js http://localhost:4321/ --all"
+    "shots": "node tools/screenshot.js http://localhost:4321/ --all",
+    "copy": "node tools/copycheck.js"
   },
   "dependencies": {
     "puppeteer": "^25.10.0"

@@ -8,7 +8,8 @@ serve the folder.
 
 ```bash
 npm run serve     # http://localhost:4321
-npm test          # 120 behavioural checks against the running server
+npm test          # 151 behavioural checks against the running server
+npm run copy      # house style: no dashes, British English, in all visible copy
 npm run shot -- http://localhost:4321/ --all --scale 1
 ```
 
@@ -21,7 +22,7 @@ an empty submit, and that every form still points at the mining desk address.
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Landing page — hero, proof, mandate, **commitments**, capabilities, commodities, employers, disciplines, lifecycle, Saudization, candidates, process, FAQ, enquiry form, insights |
+| `index.html` | Landing page: hero, **regions** (Saudi Arabia, UAE: Fujairah & Ras Al Khaimah, Oman, Africa), proof, mandate, commitments, capabilities, commodities, employers, disciplines, lifecycle, nationalisation, candidates, process, FAQ, enquiry form, insights |
 | `services.html` | The seven services in detail, plus the engagement stages |
 | `commodities.html` | Commodity-by-commodity coverage with anchors (`#gold`, `#phosphate`, …) |
 | `for-candidates.html` | Candidate path — what registering gets you, disciplines, registration form, candidate FAQ |
@@ -36,6 +37,8 @@ assets/css/components.css  the conversion layer added in v2 (nav drawer, forms, 
 assets/js/site.js          header state, mobile drawer, reveal, counters, form handling, FAQ accordion
 tools/serve.js             static dev server
 tools/smoke.js             behavioural test suite
+tools/copycheck.js         house style check: no dash characters (em, en or hyphen) and no
+                           American spellings anywhere a visitor can read
 tools/screenshot.js        deterministic screenshots via Puppeteer
 archive/                   the previous single-page build. NOT the live site — it still
                            has the old STAGE 01-05 labels and no lifecycle buttons.
@@ -66,7 +69,7 @@ same way:
 
 ```html
 <form class="form" data-enquiry
-      data-endpoint="https://formsubmit.co/ajax/recruitment@futuretalentarabia.com"
+      data-endpoint="https://formsubmit.co/ajax/02d130beabb92543c96ec571fce3949e"
       data-mailto="recruitment@futuretalentarabia.com"
       data-subject="Mining talent enquiry">
 ```
@@ -80,13 +83,12 @@ same way:
 Each form also carries a honeypot (`_honey`) that is stripped before send, and
 `_captcha=false` so submitters are not bounced through a challenge page.
 
-### One-time activation — required before the first real enquiry
+### Activation: done
 
-FormSubmit will not forward mail to an address it has not verified. **Submit the
-contact form once yourself.** A confirmation email arrives at
-recruitment@futuretalentarabia.com; click the link in it. Every submission after
-that is delivered straight to the inbox. Until you do, submissions will not
-arrive.
+The endpoint is FormSubmit's activated alias for
+recruitment@futuretalentarabia.com (`02d130beabb92543c96ec571fce3949e`), set up
+in October 2026. The alias keeps the address out of the page source. `npm test`
+pins this exact endpoint, so update `tools/smoke.js` if it ever changes.
 
 ### If you would rather not use a third-party relay
 
@@ -112,9 +114,10 @@ will fail loudly if a form is ever wired somewhere else.
 
 Two kinds of number appear, and they are not the same thing:
 
-**Sector data** — the hero stat strip. Sourced to the Ministry of Industry &
-Mineral Resources and Vision 2030 programme targets, and captioned as
-sector-wide beneath the strip. Not a claim about FTA.
+**Sector data**: the hero stat strip and the Regions cards on the landing
+page. Every figure is dated and links to its source (government, regulator,
+USGS or company release). Review them at least every six months, and only
+add a figure you can link to a credible source. Not a claim about FTA.
 
 **Service commitments** — the employer image chips (`48h` first longlist, `14`
 disciplines, `6` GCC markets) and the four process SLA chips (response within 1
@@ -138,7 +141,6 @@ loops), `.proofcard` takes awards or testimonials as-is, and both `.chip` and
 - A scalable SVG browser favicon is now wired across the live pages. The existing logo PNG remains the Apple touch icon; replace it with a square touch-icon asset if a dedicated iOS icon is required.
 - The LinkedIn URL in the footer still needs confirmation against FTA's official social account.
 - `privacy.html` is linked from the site footer and all enquiry consent labels. Before launch, have FTA review its responsible legal entity, applicable privacy requirements, FormSubmit/vendor terms, data-transfer details and retention practices.
-- Activate FormSubmit by submitting a test enquiry and confirming the verification email at `recruitment@futuretalentarabia.com`; do not consider the forms live until this one-time step is complete.
 
 ---
 

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MINING @ Future Talent Arabia — site styles
+   MINING @ Future Talent Arabia: site styles
    Palette: teal-black ink (from the FTA mark), oxidised-iron accent,
    plant-light brass, warm mineral paper.
    ========================================================================== */
@@ -26,7 +26,7 @@
   --rule-strong: #B9B1A2;
   --accent:      var(--ore);
 
-  /* fixed on-dark set — used by sections that stay dark in every theme */
+  /* fixed on-dark set: used by sections that stay dark in every theme */
   --d-bg:      #0B2A30;
   --d-fg:      #F2EEE7;
   --d-muted:   #A8BCC1;
@@ -201,10 +201,10 @@ p { margin: 0; }
 }
 .hdr__logo { display: flex; align-items: center; gap: .875rem; text-decoration: none; margin-right: auto; }
 .hdr__logo img {
-  /* the mark is a three-line stacked lockup (180x150) — below ~46px the
+  /* the mark is a three-line stacked lockup (180x150): below ~46px the
      wordmark stops being readable */
   height: 2.875rem; width: auto;
-  /* the mark is teal-black artwork — knock it out white over the dark hero */
+  /* the mark is teal-black artwork: knock it out white over the dark hero */
   filter: brightness(0) invert(1);
   transition: filter .3s ease;
 }
@@ -235,7 +235,7 @@ p { margin: 0; }
 .hdr__nav a:hover { color: var(--d-fg); border-bottom-color: var(--d-accent); }
 .hdr .btn { padding: .75rem 1.125rem; }
 
-/* scrolled state — the header lands on the page ground */
+/* scrolled state: the header lands on the page ground */
 .hdr.is-stuck {
   background: var(--bg);
   border-bottom-color: var(--rule);
@@ -285,7 +285,7 @@ p { margin: 0; }
     linear-gradient(100deg, rgba(8,31,36,.95) 0%, rgba(8,31,36,.84) 38%, rgba(8,31,36,.32) 72%, rgba(8,31,36,.55) 100%),
     linear-gradient(to bottom, rgba(8,31,36,.7) 0%, rgba(8,31,36,0) 26%);
 }
-/* bench lines — hairlines stepping down the pit wall, echoing haul-road benches */
+/* bench lines: hairlines stepping down the pit wall, echoing haul-road benches */
 .hero__benches {
   position: absolute; inset: 0; z-index: -1;
   background-image: repeating-linear-gradient(
@@ -339,7 +339,7 @@ p { margin: 0; }
   to   { opacity: 1; transform: none; }
 }
 
-/* hero data strip — sector context, sourced */
+/* hero data strip: sector context, sourced */
 .strip {
   border-top: 1px solid var(--d-rule);
   background: rgba(8,31,36,.55);

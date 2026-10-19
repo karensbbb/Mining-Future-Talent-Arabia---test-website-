@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MINING @ Future Talent Arabia — conversion layer
+   MINING @ Future Talent Arabia: conversion layer
    Loaded after site.css. Adds the structures the practice page was missing:
    mobile navigation, proof, numbered services, commodity index, employer and
    candidate paths, process SLAs, FAQ, enquiry form, insights, inner pages.
@@ -17,7 +17,7 @@
 }
 
 /* ==========================================================================
-   HEADER — mobile drawer
+   HEADER: mobile drawer
    The old build hid the nav below 62rem and put nothing in its place, so the
    site had no navigation at all on a phone. This restores it.
    ========================================================================== */
@@ -171,7 +171,7 @@ body.nav-open { overflow: hidden; }
 .badge--light::before { background: var(--accent); }
 
 /* The header button sits in a single row with the nav and must not wrap into
-   two lines. Elsewhere — the drawer, the hero, a full-width form submit —
+   two lines. Elsewhere: the drawer, the hero, a full-width form submit :
    wrapping is the correct behaviour on a narrow phone. */
 .hdr .btn { white-space: nowrap; }
 
@@ -206,7 +206,7 @@ body.nav-open { overflow: hidden; }
 
 .centered { display: flex; justify-content: center; margin-top: clamp(2rem, 4vw, 3rem); }
 
-/* Scroll reveal. Opt-in per element, and only where motion is welcome —
+/* Scroll reveal. Opt-in per element, and only where motion is welcome :
    with reduced motion the elements are simply visible from the start. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal { opacity: 0; transform: translateY(18px); }
@@ -218,7 +218,7 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ==========================================================================
-   TRUST BAR — the operating context our people work in
+   TRUST BAR: the operating context our people work in
    ========================================================================== */
 
 .trust {
@@ -517,7 +517,7 @@ body.nav-open { overflow: hidden; }
   clip-path: inset(0 0 0 0 round var(--radius-pill));
 }
 
-/* The circle itself stays put and keeps its own colour — it is the one part
+/* The circle itself stays put and keeps its own colour: it is the one part
    that does not move, which is what sells the fill expanding out from it. */
 .arrowfill__icon {
   position: absolute;
@@ -556,7 +556,7 @@ body.nav-open { overflow: hidden; }
 .arrowfill:active .arrowfill__arrow--out,
 .arrowfill:focus-visible .arrowfill__arrow--out { transform: translate(70%, -50%) scale(0); }
 
-/* Full-width variant — used in the lifecycle rail, where each button has to
+/* Full-width variant: used in the lifecycle rail, where each button has to
    fit a narrow grid column. */
 .arrowfill--block { display: flex; width: 100%; }
 .arrowfill--block .arrowfill__label,
@@ -573,7 +573,7 @@ body.nav-open { overflow: hidden; }
 .stage .arrowfill { margin-top: 1.125rem; }
 
 /* ==========================================================================
-   PLEDGES — the two commitments, inside a dark panel
+   PLEDGES: the two commitments, inside a dark panel
    ========================================================================== */
 
 .pledges {
@@ -1072,7 +1072,7 @@ body.nav-open { overflow: hidden; }
 .field input[aria-invalid="true"],
 .field select[aria-invalid="true"],
 .field textarea[aria-invalid="true"] { border-color: var(--ore); }
-/* Overrides the uppercase mono label styling above — a hint is prose. */
+/* Overrides the uppercase mono label styling above: a hint is prose. */
 .field > span.field__hint {
   font-family: var(--font-body);
   font-size: .75rem;
@@ -1129,7 +1129,7 @@ body.nav-open { overflow: hidden; }
 .form__status--ok  { border-color: #2F6B4F; color: #2F6B4F; background: rgba(47,107,79,.07); }
 .form__status--err { border-color: var(--ore); color: var(--ore); background: rgba(180,85,42,.07); }
 
-/* honeypot — off-screen rather than display:none so bots still fill it */
+/* honeypot: off-screen rather than display:none so bots still fill it */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 @media (max-width: 40rem) {
@@ -1137,10 +1137,10 @@ body.nav-open { overflow: hidden; }
 }
 
 /* ==========================================================================
-   BRIEF CARD — split-panel short enquiry form
+   BRIEF CARD: split-panel short enquiry form
 
    A single rounded card: mining photograph and the pitch on the left, four
-   fields on the right. Four fields is the whole point — it is the low-friction
+   fields on the right. Four fields is the whole point: it is the low-friction
    route in, and contact.html still carries the long qualified form for anyone
    who wants to give full detail up front.
 
@@ -1243,7 +1243,7 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 56rem) {
   .briefcard { grid-template-columns: 1fr; }
-  /* The photo becomes a banner rather than disappearing — it is what tells a
+  /* The photo becomes a banner rather than disappearing: it is what tells a
      visitor on a phone which practice they are writing to. */
   .briefcard__media { min-height: 15rem; }
   .briefcard__logo { margin-bottom: 0; }
@@ -1439,4 +1439,86 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 30rem) {
   .ftr__top { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   REACH: one desk across Saudi Arabia, the UAE, Oman and Africa.
+   A single dark panel with one row per market, so the markets read as one
+   offer rather than as cards to compare.
+   ========================================================================== */
+
+.reach { background: var(--d-bg); color: var(--d-fg); }
+.reach h2 { color: #fff; }
+.reach .lede { color: var(--d-muted); }
+.reach__panel {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border: 1px solid var(--d-rule);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.025);
+  overflow: hidden;
+}
+.reach__row {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.25rem, 3vw, 2.5rem);
+  transition: background .25s ease;
+}
+.reach__row + .reach__row { border-top: 1px solid var(--d-rule); }
+.reach__row:hover { background: rgba(255,255,255,.035); }
+.reach__market h3 {
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  color: #fff;
+  position: relative;
+  padding-left: 1rem;
+}
+.reach__market h3::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .2em; bottom: .2em;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--d-accent);
+}
+.reach__market p {
+  margin-top: .625rem;
+  padding-left: 1rem;
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  line-height: 1.6;
+}
+.reach__work { color: #D9E2E4; font-size: clamp(.9375rem, 1.3vw, 1.0625rem); line-height: 1.6; max-width: 46em; }
+.reach__lists {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+}
+.reach__lists h4 {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  margin-bottom: .625rem;
+}
+.reach__lists ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .375rem .5rem; }
+.reach__lists li {
+  font-size: .8125rem;
+  color: var(--d-fg);
+  border: 1px solid var(--d-rule-hi);
+  border-radius: var(--radius-pill);
+  padding: .3rem .7rem;
+}
+.reach__cta { margin-top: clamp(1.75rem, 3vw, 2.5rem); display: flex; flex-wrap: wrap; gap: .75rem; }
+
+@media (max-width: 52rem) {
+  .reach__row { grid-template-columns: 1fr; gap: 1rem; }
+}
+@media (max-width: 34rem) {
+  .reach__lists { grid-template-columns: 1fr; }
 }

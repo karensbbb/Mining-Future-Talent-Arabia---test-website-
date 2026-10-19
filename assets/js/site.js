@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MINING @ Future Talent Arabia — site behaviour
+   MINING @ Future Talent Arabia: site behaviour
    No dependencies. Every block guards its own elements, so the same file is
    safe to load on pages that only use some of them.
    ========================================================================== */
@@ -9,7 +9,7 @@
   var motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ----------------------------------------------------------------------
-     Header state — transparent over the hero, landed on the page ground
+     Header state: transparent over the hero, landed on the page ground
      once the hero has scrolled past.
      ---------------------------------------------------------------------- */
   (function header() {
@@ -56,7 +56,7 @@
       setOpen(burger.getAttribute('aria-expanded') !== 'true');
     });
 
-    /* Any link closes it — in-page anchors would otherwise scroll behind
+    /* Any link closes it: in-page anchors would otherwise scroll behind
        an open panel. */
     panel.addEventListener('click', function (e) {
       if (e.target.closest('a')) setOpen(false);
@@ -173,12 +173,12 @@
   /* ----------------------------------------------------------------------
      Enquiry forms.
 
-     Every form on this site delivers to the address in data-mailto — the
+     Every form on this site delivers to the address in data-mailto: the
      mining desk inbox. The submission is POSTed to the relay in
      data-endpoint, which forwards it there as an email.
 
-     If that request fails for any reason — the relay is down, the visitor is
-     offline, an extension blocked it — we open a pre-filled mail draft to the
+     If that request fails for any reason: the relay is down, the visitor is
+     offline, an extension blocked it: we open a pre-filled mail draft to the
      same address instead. An enquiry is never silently lost.
      ---------------------------------------------------------------------- */
   (function enquiry() {
@@ -201,7 +201,7 @@
       }
 
       /* Field names starting with "_" are instructions to the relay, not
-         answers from the visitor — keep them out of the readable draft. */
+         answers from the visitor: keep them out of the readable draft. */
       function asText(data) {
         var lines = [];
         data.forEach(function (value, key) {
@@ -221,7 +221,7 @@
         e.preventDefault();
 
         /* Honeypot: a real person never sees this field, so anything in it
-           came from a bot. Fail silently — do not teach it what went wrong. */
+           came from a bot. Fail silently: do not teach it what went wrong. */
         var hp = form.querySelector('input[name="_honey"]');
         if (hp && hp.value) return;
 
@@ -241,14 +241,14 @@
         var data = new FormData(form);
         var subject = form.getAttribute('data-subject') || 'Mining enquiry';
         var who = data.get('company') || data.get('first_name');
-        if (who) subject += ' — ' + who;
+        if (who) subject += ': ' + who;
         data.set('_subject', subject);
 
         var endpoint = form.getAttribute('data-endpoint');
 
         if (!endpoint) {
           mailFallback(data, subject);
-          say('Opening your email client with the enquiry pre-filled and addressed to ' + to + '.', 'ok');
+          say('Opening your email client with the enquiry prefilled and addressed to ' + to + '.', 'ok');
           return;
         }
 
@@ -258,11 +258,11 @@
           .then(function (res) {
             if (!res.ok) throw new Error('Relay returned ' + res.status);
             form.reset();
-            say('Thank you — your enquiry is with our mining desk. We treat every brief as confidential and respond within one business day.', 'ok');
+            say('Thank you. Your enquiry is with our mining desk. We treat every brief as confidential and respond within one business day.', 'ok');
           })
           .catch(function () {
             mailFallback(data, subject);
-            say('We could not send that from the page, so we have opened an email to ' + to + ' with your details filled in. Please press send — or write to us at that address directly.', 'err');
+            say('We could not send that from the page, so we have opened an email to ' + to + ' with your details filled in. Please press send, or write to us at that address directly.', 'err');
           })
           .then(function () {
             if (submit) { submit.disabled = false; submit.textContent = submitLabel; }
@@ -279,7 +279,7 @@
   })();
 
   /* ----------------------------------------------------------------------
-     FAQ — one open at a time within a list.
+     FAQ: one open at a time within a list.
      ---------------------------------------------------------------------- */
   (function faq() {
     var lists = document.querySelectorAll('[data-accordion]');

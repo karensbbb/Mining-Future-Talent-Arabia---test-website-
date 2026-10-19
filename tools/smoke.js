@@ -254,8 +254,11 @@ async function main() {
     check('landing brief card blocks an empty submit', shape.warned);
     await brief.close();
 
-    // Every form on the site must deliver to the mining desk inbox.
+    // Every form on the site must deliver to the mining desk inbox. The relay
+    // endpoint is FormSubmit's activated alias for that inbox (the alias hides
+    // the address from scrapers), so it is pinned exactly here.
     const DESK = 'recruitment@futuretalentarabia.com';
+    const ENDPOINT = 'https://formsubmit.co/ajax/02d130beabb92543c96ec571fce3949e';
     for (const route of ['/', '/contact.html', '/for-candidates.html']) {
       const p = await browser.newPage();
       await p.goto(base + route, { waitUntil: 'networkidle2' });
@@ -268,7 +271,7 @@ async function main() {
       check(`${route} has an enquiry form`, wiring.length > 0);
       wiring.forEach((w) => {
         check(`${route} form posts to the mining desk`,
-          w.endpoint.indexOf(DESK) !== -1, w.endpoint || 'no endpoint');
+          w.endpoint === ENDPOINT, w.endpoint || 'no endpoint');
         check(`${route} form falls back to the mining desk`, w.mailto === DESK, w.mailto);
         check(`${route} form sets a subject`, w.subject.length > 0, w.subject);
       });
